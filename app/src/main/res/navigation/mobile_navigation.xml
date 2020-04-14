@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.mike.tennisnotes.ui.dashboard.DashboardFragment"
+        android:name="com.mike.tennisnotes.ui.dashboard.NewNoteFragment"
         android:label="@string/title_new_note"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_new_note" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.mike.tennisnotes.ui.notifications.NotificationsFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>
