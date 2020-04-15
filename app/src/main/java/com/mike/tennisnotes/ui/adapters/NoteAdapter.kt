@@ -1,22 +1,19 @@
 package com.mike.tennisnotes.ui.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mike.tennisnotes.R
+import com.mike.tennisnotes.data.TennisNote
 import com.mike.tennisnotes.databinding.NoteViewholderBinding
-import com.mike.tennisnotes.ui.model.Note
 import com.mike.tennisnotes.viewmodels.NotesViewModel
 
 class MainAdapter :
-    ListAdapter<String, MainAdapter.ViewHolder>(GardenPlantDiffCallback()) {
+    ListAdapter<TennisNote, MainAdapter.ViewHolder>(GardenPlantDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -39,23 +36,24 @@ class MainAdapter :
             }
         }
 
-        fun bind(title: String) {
+        fun bind(notes: TennisNote) {
             with(binding) {
-                viewModel = NotesViewModel(title)
+                viewModel = NotesViewModel(notes)
                 executePendingBindings()
             }
         }
     }
 }
 
-private class GardenPlantDiffCallback : DiffUtil.ItemCallback<String>() {
-
-
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem == newItem
+private class GardenPlantDiffCallback : DiffUtil.ItemCallback<TennisNote>() {
+    override fun areItemsTheSame(oldItem: TennisNote, newItem: TennisNote): Boolean {
+        return oldItem.title == newItem.title
     }
 
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem == newItem
+    override fun areContentsTheSame(oldItem: TennisNote, newItem: TennisNote): Boolean {
+        return oldItem.title == newItem.title
+
     }
+
+
 }
