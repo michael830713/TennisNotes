@@ -5,16 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mike.tennisnotes.R
+import com.mike.tennisnotes.databinding.FragmentHomeBinding
 import com.mike.tennisnotes.ui.adapters.MainAdapter
 import com.mike.tennisnotes.ui.model.Note
 
 class HomeFragment : Fragment() {
+    private lateinit var binding: FragmentHomeBinding
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -35,7 +39,6 @@ class HomeFragment : Fragment() {
     )
 
 
-
     var threeDayForecast = mutableListOf<Note>(
         Note("first"),
         Note("first"),
@@ -49,27 +52,29 @@ class HomeFragment : Fragment() {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
 
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+            ViewModelProvider(this).get(HomeViewModel::class.java)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        mRecyclerView = root.findViewById(R.id.notes)
-        mRecyclerView.layoutManager = LinearLayoutManager(activity)
-        mRecyclerView.adapter = MainAdapter(items, container!!.context)
+        binding.notes.layoutManager = LinearLayoutManager(activity)
+        val adapter = MainAdapter()
+        adapter.submitList(items)
+        binding.notes.adapter = adapter
+
+        return binding.root
 
 
-
-
-        return root
     }
 }
