@@ -56,7 +56,6 @@ class NewNoteFragment : Fragment() {
     }
 
 
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
@@ -141,10 +140,13 @@ class NewNoteFragment : Fragment() {
                         val msg = "Photo capture succeeded: ${file.absolutePath}"
                         viewFinder.post {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                         findNavController().navigate(NewNoteFragmentDirections.actionNavigationNewNoteToEditNoteFragment(msg))
-
+                            findNavController().navigate(
+                                NewNoteFragmentDirections.actionNavigationNewNoteToEditNoteFragment(
+                                    msg
+                                )
+                            )
+                            CameraX.unbindAll()
                         }
-
                     }
                 })
         }
