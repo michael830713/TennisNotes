@@ -5,16 +5,16 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.camera.core.*
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.mike.tennisnotes.R
 import timber.log.Timber
 import java.io.File
@@ -27,7 +27,6 @@ private const val REQUEST_CODE_PERMISSIONS = 10
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 class NewNoteFragment : Fragment() {
-
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var viewFinder: TextureView
@@ -56,27 +55,11 @@ class NewNoteFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Timber.d("new note fragment destroyed")
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        // Request camera permissions
-
-
-        // Every time the provided texture view changes, recompute layout
-
-
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
-        Timber.d("requested camera")
 
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
@@ -104,7 +87,6 @@ class NewNoteFragment : Fragment() {
         val previewConfig = PreviewConfig.Builder().apply {
             setTargetResolution(Size(640, 480))
         }.build()
-
 
         // Build the viewfinder use case
         val preview = Preview(previewConfig)
@@ -150,7 +132,6 @@ class NewNoteFragment : Fragment() {
                         exc: Throwable?
                     ) {
                         val msg = "Photo capture failed: $message"
-                        Timber.e(exc, msg)
                         viewFinder.post {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                         }
@@ -160,7 +141,10 @@ class NewNoteFragment : Fragment() {
                         val msg = "Photo capture succeeded: ${file.absolutePath}"
                         viewFinder.post {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                         findNavController().navigate(NewNoteFragmentDirections.actionNavigationNewNoteToEditNoteFragment(msg))
+
                         }
+
                     }
                 })
         }

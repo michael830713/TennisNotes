@@ -12,14 +12,27 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_new_note"
         android:name="com.mike.tennisnotes.ui.dashboard.NewNoteFragment"
         android:label="@string/title_new_note"
-        tools:layout="@layout/fragment_new_note" />
+        tools:layout="@layout/fragment_new_note">
+        <action
+            android:id="@+id/action_navigation_new_note_to_editNoteFragment"
+            app:destination="@id/editNoteFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_profile"
         android:name="com.mike.tennisnotes.ui.notifications.NotificationsFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/editNoteFragment"
+        android:name="com.mike.tennisnotes.EditNoteFragment"
+        android:label="fragment_edit_note"
+        tools:layout="@layout/fragment_edit_note" >
+        <argument
+            android:name="imageSource"
+            app:argType="string" />
+    </fragment>
 </navigation>

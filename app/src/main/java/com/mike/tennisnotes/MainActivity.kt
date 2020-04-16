@@ -3,9 +3,7 @@ package com.mike.tennisnotes
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
-import android.view.MenuItem
 import android.view.View
-import android.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -36,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+            setOf(R.id.navigation_home, R.id.navigation_new_note, R.id.navigation_profile)
         )
 
         setSupportActionBar(toolbar)
