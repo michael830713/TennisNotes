@@ -5,17 +5,19 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import android.view.*
+import android.widget.ImageButton
 import android.widget.Toast
-import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
+import androidx.camera.core.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.mike.tennisnotes.R
+import timber.log.Timber
+import java.io.File
 import java.util.concurrent.Executors
 
 
@@ -29,7 +31,7 @@ class NewNoteFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var viewFinder: TextureView
-
+    private lateinit var root: View
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,7 +39,7 @@ class NewNoteFragment : Fragment() {
     ): View? {
         dashboardViewModel =
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_new_note, container, false)
+        root = inflater.inflate(R.layout.fragment_new_note, container, false)
 
         viewFinder = root.findViewById(R.id.view_finder)
         viewFinder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
@@ -46,12 +48,17 @@ class NewNoteFragment : Fragment() {
         if (allPermissionsGranted()) {
             viewFinder.post { startCamera() }
         } else {
-            ActivityCompat.requestPermissions(
-                (context as Activity?)!!, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            requestPermissions(
+                REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
 
         return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.d("new note fragment destroyed")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +76,7 @@ class NewNoteFragment : Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
-
+        Timber.d("requested camera")
 
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
@@ -118,7 +125,48 @@ class NewNoteFragment : Fragment() {
         // If Android Studio complains about "this" being not a LifecycleOwner
         // try rebuilding the project or updating the appcompat dependency to
         // version 1.1.0 or higher.
-        CameraX.bindToLifecycle(this, preview)
+
+        val imageCaptureConfig = ImageCaptureConfig.Builder()
+            .apply {
+                // We don't set a resolution for image capture; instead, we
+                // select a capture mode which will infer the appropriate
+                // resolution based on aspect ration and requested mode
+                setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
+            }.build()
+
+        // Build the image capture use case and attach button click listener
+        val imageCapture = ImageCapture(imageCaptureConfig)
+        root.findViewById<ImageButton>(R.id.capture_button).setOnClickListener {
+            val file = File(
+                context?.externalMediaDirs?.first(),
+                "${System.currentTimeMillis()}.jpg"
+            )
+
+            imageCapture.takePicture(file, executor,
+                object : ImageCapture.OnImageSavedListener {
+                    override fun onError(
+                        imageCaptureError: ImageCapture.ImageCaptureError,
+                        message: String,
+                        exc: Throwable?
+                    ) {
+                        val msg = "Photo capture failed: $message"
+                        Timber.e(exc, msg)
+                        viewFinder.post {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onImageSaved(file: File) {
+                        val msg = "Photo capture succeeded: ${file.absolutePath}"
+                        viewFinder.post {
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+        }
+
+
+        CameraX.bindToLifecycle(this, preview, imageCapture)
     }
 
     private fun updateTransform() {
@@ -130,7 +178,7 @@ class NewNoteFragment : Fragment() {
         val centerY = viewFinder.height / 2f
 
         // Correct preview output to account for display rotation
-        val rotationDegrees = when(viewFinder.display.rotation) {
+        val rotationDegrees = when (viewFinder.display.rotation) {
             Surface.ROTATION_0 -> 0
             Surface.ROTATION_90 -> 90
             Surface.ROTATION_180 -> 180
