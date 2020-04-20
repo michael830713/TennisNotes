@@ -23,7 +23,6 @@ import java.util.concurrent.Executors
 
 private const val REQUEST_CODE_PERMISSIONS = 10
 
-// This is an array of all the permission specified in the manifest.
 private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 class NewNoteFragment : Fragment() {
@@ -137,7 +136,7 @@ class NewNoteFragment : Fragment() {
                     }
 
                     override fun onImageSaved(file: File) {
-                        val msg = "Photo capture succeeded: ${file.absolutePath}"
+                        val msg = file.absolutePath
                         viewFinder.post {
                             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                             findNavController().navigate(
@@ -150,8 +149,6 @@ class NewNoteFragment : Fragment() {
                     }
                 })
         }
-
-
         CameraX.bindToLifecycle(this, preview, imageCapture)
     }
 
