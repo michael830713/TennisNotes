@@ -7,5 +7,10 @@
         android:id="@+id/more"
         android:title="@string/more"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/save"
+        android:title="@string/save"
+        android:icon="@drawable/ic_check_black_24dp"
+        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -1,11 +1,12 @@
 package com.mike.tennisnotes
 
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.mike.tennisnotes.data.TennisNoteDao
+import com.mike.tennisnotes.data.TennisNoteRepository
 import com.mike.tennisnotes.databinding.FragmentEditNoteBinding
 
 class EditNoteFragment : Fragment() {
@@ -16,7 +17,7 @@ class EditNoteFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             viewModelFactory =
-                EditNoteViewModelFactory(EditNoteFragmentArgs.fromBundle(arguments!!).imageSource)
+                EditNoteViewModelFactory(TennisNoteRepository(requireContext()),EditNoteFragmentArgs.fromBundle(requireArguments()).imageSource)
             editNoteViewModel =
                 ViewModelProvider(this, viewModelFactory).get(EditNoteViewModel::class.java)
         }
@@ -32,8 +33,32 @@ class EditNoteFragment : Fragment() {
         binding = FragmentEditNoteBinding.inflate(inflater, container, false).apply {
             viewModel = editNoteViewModel
         }
+
+        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.top_app_bar, menu);
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // If we got here, the user's action was not recognized.
+        // Invoke the superclass to handle it.
+        return when (item.itemId) {
+            R.id.save -> {
+                Toast.makeText(context, "saved", Toast.LENGTH_SHORT).show()
+                editNoteViewModel.addNoteToDatabase()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+
     }
 
     companion object {

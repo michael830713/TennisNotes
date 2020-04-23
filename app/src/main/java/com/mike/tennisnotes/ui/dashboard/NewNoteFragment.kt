@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.*
-import androidx.camera.core.ImageCapture.OnImageSavedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -44,7 +43,7 @@ class NewNoteFragment : Fragment() {
         )
 
         imageCapture.takePicture(file, executor,
-            object : OnImageSavedListener {
+            object : ImageCapture.OnImageSavedListener {
                 override fun onError(
                     imageCaptureError: ImageCapture.ImageCaptureError,
                     message: String,
