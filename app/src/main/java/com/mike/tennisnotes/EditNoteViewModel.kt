@@ -19,4 +19,11 @@ class EditNoteViewModel(private val tennisNoteRepository: TennisNoteRepository, 
         }
     }
 
+    fun getNotesFromDatabase() {
+        viewModelScope.launch {
+            tennisNoteRepository.getTennisNote()
+
+        }
+    }
+
 }

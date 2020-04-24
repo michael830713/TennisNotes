@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "tennis_notes")
 data class TennisNote(
     val title: String,
     val imageUrl: String,

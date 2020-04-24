@@ -17,7 +17,10 @@ class EditNoteFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             viewModelFactory =
-                EditNoteViewModelFactory(TennisNoteRepository(requireContext()),EditNoteFragmentArgs.fromBundle(requireArguments()).imageSource)
+                EditNoteViewModelFactory(
+                    TennisNoteRepository(requireContext()),
+                    EditNoteFragmentArgs.fromBundle(requireArguments()).imageSource
+                )
             editNoteViewModel =
                 ViewModelProvider(this, viewModelFactory).get(EditNoteViewModel::class.java)
         }
@@ -55,7 +58,10 @@ class EditNoteFragment : Fragment() {
                 editNoteViewModel.addNoteToDatabase()
                 return true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                editNoteViewModel.getNotesFromDatabase()
+                return true
+            }
         }
 
 
