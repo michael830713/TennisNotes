@@ -6,24 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mike.tennisnotes.data.TennisNoteRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class EditNoteViewModel(private val tennisNoteRepository: TennisNoteRepository, val url: String) :
     ViewModel() {
 
-    private var title: String = ""
-    private var content: String = ""
 
-    fun addNoteToDatabase() {
-        viewModelScope.launch {
-            tennisNoteRepository.createTennisNote(title, content, url)
-        }
+    fun addNoteToDatabase(title: String,content: String ) {
+        Timber.d(content)
+        viewModelScope.launch { tennisNoteRepository.createTennisNote(title, content, url) }
     }
 
-    fun getNotesFromDatabase() {
-        viewModelScope.launch {
-            tennisNoteRepository.getTennisNote()
-
-        }
-    }
 
 }

@@ -1,13 +1,15 @@
 package com.mike.tennisnotes.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.mike.tennisnotes.data.TennisNote
+import com.mike.tennisnotes.data.TennisNoteRepository
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(tennisNoteRepository: TennisNoteRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+
+    val notes: LiveData<List<TennisNote>> =
+        Transformations.map(tennisNoteRepository.getTennisNote()) { it.reversed() }
+
+
 }

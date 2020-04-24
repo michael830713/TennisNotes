@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class TennisNote(
     val title: String,
     val imageUrl: String,
-    val content: String="",
+    val content: String,
     @PrimaryKey val noteId: String = java.util.UUID.randomUUID().toString()
 )

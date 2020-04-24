@@ -34,5 +34,8 @@
         <argument
             android:name="imageSource"
             app:argType="string" />
+        <action
+            android:id="@+id/action_editNoteFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 </navigation>

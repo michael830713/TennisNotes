@@ -5,34 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mike.tennisnotes.data.TennisNote
+import com.mike.tennisnotes.data.TennisNoteRepository
 import com.mike.tennisnotes.databinding.FragmentHomeBinding
 import com.mike.tennisnotes.ui.adapters.MainAdapter
 import com.mike.tennisnotes.ui.model.Note
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModelFactory: HomeViewModelFactory
 
-val url="https://upload.wikimedia.org/wikipedia/commons/8/8e/Roger_Federer_2012_Indian_Wells.jpg"
-    val items = listOf(
-
-        TennisNote("apple",url),
-        TennisNote("banana",url),
-        TennisNote("cherry",url),
-        TennisNote("durian",url),
-        TennisNote("grape",url),
-        TennisNote("honeydew melon",url),
-        TennisNote("lemon",url),
-        TennisNote("orange",url),
-        TennisNote("kiwi fruit",url),
-        TennisNote("papaya",url),
-        TennisNote("tangerine",url),
-        TennisNote("watermelon",url)
-    )
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        homeViewModelFactory = HomeViewModelFactory(TennisNoteRepository(requireContext()))
+        homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +36,14 @@ val url="https://upload.wikimedia.org/wikipedia/commons/8/8e/Roger_Federer_2012_
 
         binding.notes.layoutManager = LinearLayoutManager(activity)
         val adapter = MainAdapter()
-        adapter.submitList(items)
+        subscribeUi(adapter)
         binding.notes.adapter = adapter
 
         return binding.root
 
 
     }
+
+    private fun subscribeUi(adapter: MainAdapter) =
+        homeViewModel.notes.observe(viewLifecycleOwner, Observer(adapter::submitList))
 }

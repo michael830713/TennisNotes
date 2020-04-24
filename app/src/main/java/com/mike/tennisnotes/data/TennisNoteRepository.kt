@@ -1,6 +1,7 @@
 package com.mike.tennisnotes.data
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.mike.tennisnotes.R
 import timber.log.Timber
@@ -18,12 +19,6 @@ class TennisNoteRepository(context: Context) {
         Timber.d("note ${tennisNote.noteId}")
     }
 
-    suspend fun getTennisNote() {
-
-        var notes = db.tennisNoteDao().getAll()
-        var list: List<String> = notes.map { note -> note.noteId }.toList()
-
-        Timber.d("note $list")
-    }
+    fun getTennisNote(): LiveData<List<TennisNote>> = db.tennisNoteDao().getAll()
 
 }

@@ -5,24 +5,26 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.mike.tennisnotes.data.TennisNoteDao
+import androidx.navigation.fragment.findNavController
 import com.mike.tennisnotes.data.TennisNoteRepository
 import com.mike.tennisnotes.databinding.FragmentEditNoteBinding
+import com.mike.tennisnotes.utils.SystemUtils
+import com.mike.tennisnotes.utils.SystemUtils.Companion.hideKeyboard
 
 class EditNoteFragment : Fragment() {
     private lateinit var binding: FragmentEditNoteBinding
     private lateinit var editNoteViewModel: EditNoteViewModel
-    private lateinit var viewModelFactory: EditNoteViewModelFactory
+    private lateinit var editNoteViewModelFactory: EditNoteViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            viewModelFactory =
+            editNoteViewModelFactory =
                 EditNoteViewModelFactory(
                     TennisNoteRepository(requireContext()),
                     EditNoteFragmentArgs.fromBundle(requireArguments()).imageSource
                 )
             editNoteViewModel =
-                ViewModelProvider(this, viewModelFactory).get(EditNoteViewModel::class.java)
+                ViewModelProvider(this, editNoteViewModelFactory).get(EditNoteViewModel::class.java)
         }
     }
 
@@ -37,6 +39,8 @@ class EditNoteFragment : Fragment() {
             viewModel = editNoteViewModel
         }
 
+
+
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return binding.root
@@ -50,21 +54,20 @@ class EditNoteFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // If we got here, the user's action was not recognized.
-        // Invoke the superclass to handle it.
         return when (item.itemId) {
             R.id.save -> {
                 Toast.makeText(context, "saved", Toast.LENGTH_SHORT).show()
-                editNoteViewModel.addNoteToDatabase()
-                return true
+                editNoteViewModel.addNoteToDatabase(
+                    binding.titleEditText.text.toString(), binding.contentEditText.text.toString()
+                )
+                hideKeyboard()
+                findNavController().navigate(EditNoteFragmentDirections.actionEditNoteFragmentToNavigationHome())
+                true
             }
             else -> {
-                editNoteViewModel.getNotesFromDatabase()
-                return true
+                true
             }
         }
-
-
     }
 
     companion object {

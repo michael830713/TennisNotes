@@ -1,5 +1,6 @@
 package com.mike.tennisnotes.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -10,5 +11,5 @@ interface TennisNoteDao {
     suspend fun insertGardenPlanting(tennisNote: TennisNote): Long
 
     @Query("SELECT * FROM tennis_notes")
-   suspend fun getAll(): List<TennisNote>
+    fun getAll(): LiveData<List<TennisNote>>
 }

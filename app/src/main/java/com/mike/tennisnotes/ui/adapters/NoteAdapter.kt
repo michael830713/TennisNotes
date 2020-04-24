@@ -32,7 +32,7 @@ class MainAdapter :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener { view ->
-                Toast.makeText(view.context, binding?.viewModel?.title, Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, binding?.viewModel?.content, Toast.LENGTH_LONG).show()
             }
         }
 
