@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.dashboard.NewNoteFragment">
+        tools:context=".ui.new_note.NewNoteFragment">
 
         <TextureView
             android:id="@+id/view_finder"

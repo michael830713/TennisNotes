@@ -1,4 +1,4 @@
-package com.mike.tennisnotes.ui.dashboard
+package com.mike.tennisnotes.ui.new_note
 
 import android.Manifest
 import android.os.Bundle

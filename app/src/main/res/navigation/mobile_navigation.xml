@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_new_note"
-        android:name="com.mike.tennisnotes.ui.dashboard.NewNoteFragment"
+        android:name="com.mike.tennisnotes.ui.new_note.NewNoteFragment"
         android:label="@string/title_new_note"
         tools:layout="@layout/fragment_new_note">
         <action
