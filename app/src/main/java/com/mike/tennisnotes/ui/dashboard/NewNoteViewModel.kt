@@ -3,7 +3,6 @@ package com.mike.tennisnotes.ui.dashboard
 import android.graphics.Matrix
 import android.view.Surface
 import android.view.TextureView
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

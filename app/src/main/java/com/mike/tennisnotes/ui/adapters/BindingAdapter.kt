@@ -1,6 +1,5 @@
 package com.mike.tennisnotes.ui.adapters
 
-import android.graphics.BitmapFactory
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
